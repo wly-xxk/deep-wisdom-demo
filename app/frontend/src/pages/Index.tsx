@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { BookOpen, History, Loader2, LogOut, Terminal } from 'lucide-react';
+import { BookOpen, History, Home, Loader2, LogOut, Terminal } from 'lucide-react';
 import { toast } from 'sonner';
 import { StepRail, type StageKey } from '@/components/interview/StepRail';
 import { AgentAvatar, EmptyState, ErrorNote, Panel, PanelHeader } from '@/components/interview/ui';
@@ -94,6 +94,12 @@ export default function Index() {
 
   const patch = (next: Partial<SavedState>) => setState((prev) => ({ ...prev, ...next }));
 
+  /** Return to the main workspace, closing any secondary view. */
+  const goHome = () => {
+    setShowKnowledge(false);
+    setShowHistory(false);
+  };
+
   const openHistorySession = async (id: number) => {
     try {
       const res = await client.apiCall.invoke({
@@ -185,7 +191,12 @@ export default function Index() {
     <div className="min-h-screen bg-background">
       <header className="border-b border-border">
         <div className="mx-auto flex max-w-[1280px] flex-wrap items-center justify-between gap-3 px-4 py-3.5 sm:px-6">
-          <div className="flex items-center gap-3">
+          <button
+            type="button"
+            className="flex items-center gap-3 rounded-md px-1.5 py-1 text-left transition-colors hover:bg-[hsl(var(--surface-raised))]"
+            aria-label="返回首页"
+            onClick={goHome}
+          >
             <div className="flex h-8 w-8 items-center justify-center rounded-md border border-[hsl(var(--brand)/0.4)] bg-[hsl(var(--brand)/0.14)] font-display text-[13px] font-semibold text-[hsl(var(--brand))]">
               面
             </div>
@@ -197,13 +208,21 @@ export default function Index() {
                 多智能体协作 · 面试备战
               </p>
             </div>
-          </div>
+          </button>
           <div className="flex items-center gap-2">
+            <button
+              type="button"
+              className={`btn h-8 ${!showKnowledge && !showHistory ? 'btn-secondary' : 'btn-ghost'}`}
+              onClick={goHome}
+            >
+              <Home className="h-3.5 w-3.5" />
+              工作台
+            </button>
             <button
               type="button"
               className={`btn h-8 ${showKnowledge ? 'btn-secondary' : 'btn-ghost'}`}
               onClick={() => {
-                setShowKnowledge(true);
+                setShowKnowledge((prev) => !prev);
                 setShowHistory(false);
               }}
             >
