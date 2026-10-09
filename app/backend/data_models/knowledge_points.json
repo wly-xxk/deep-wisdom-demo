@@ -1,0 +1,46 @@
+{
+    "title": "knowledge_points",
+    "type": "object",
+    "description": "Global shared knowledge base of technical knowledge points (system maintained)",
+    "properties": {
+        "id": {
+            "type": "integer",
+            "description": "Auto-increment primary key"
+        },
+        "name": {
+            "type": "string",
+            "description": "Unique technology name, e.g. Kubernetes"
+        },
+        "category": {
+            "type": "string",
+            "description": "Knowledge category"
+        },
+        "definition": {
+            "type": "string",
+            "description": "One-line definition"
+        },
+        "key_points": {
+            "type": "array",
+            "description": "Key points list"
+        },
+        "common_exam_points": {
+            "type": "array",
+            "description": "Common interview exam points"
+        },
+        "related_technologies": {
+            "type": "array",
+            "description": "Related technology names"
+        },
+        "version": {
+            "type": "integer",
+            "description": "Content version number"
+        },
+        "feedback_count": {
+            "type": "integer",
+            "description": "Times this knowledge point was referenced"
+        }
+    },
+    "required": [
+        "name"
+    ]
+}

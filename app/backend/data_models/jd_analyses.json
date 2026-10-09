@@ -1,0 +1,43 @@
+{
+    "title": "jd_analyses",
+    "type": "object",
+    "description": "JD analysis result: structured ability matrix produced by the JD Analyst agent",
+    "properties": {
+        "id": {
+            "type": "integer",
+            "description": "Auto-increment primary key"
+        },
+        "user_id": {
+            "type": "string",
+            "description": "Owner user id (system managed)"
+        },
+        "company": {
+            "type": "string",
+            "description": "Company name extracted from the JD"
+        },
+        "position": {
+            "type": "string",
+            "description": "Position title extracted from the JD"
+        },
+        "jd_text": {
+            "type": "string",
+            "description": "Raw JD text pasted by the user"
+        },
+        "abilities": {
+            "type": "object",
+            "description": "Structured ability matrix items as a JSONB list"
+        },
+        "summary": {
+            "type": "string",
+            "description": "Short analysis summary"
+        },
+        "status": {
+            "type": "string",
+            "description": "Analysis status"
+        }
+    },
+    "required": [
+        "jd_text",
+        "user_id"
+    ]
+}

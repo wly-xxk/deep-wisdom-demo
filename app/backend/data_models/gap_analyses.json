@@ -1,0 +1,36 @@
+{
+    "title": "gap_analyses",
+    "type": "object",
+    "description": "Gap analysis comparing the ability matrix against the resume evidence",
+    "properties": {
+        "id": {
+            "type": "integer",
+            "description": "Auto-increment primary key"
+        },
+        "user_id": {
+            "type": "string",
+            "description": "Owner user id (system managed)"
+        },
+        "jd_id": {
+            "type": "integer",
+            "description": "Related jd_analyses id"
+        },
+        "resume_text": {
+            "type": "string",
+            "description": "Raw resume text pasted by the user"
+        },
+        "gaps": {
+            "type": "object",
+            "description": "Gap analysis entries as a JSONB list"
+        },
+        "summary": {
+            "type": "string",
+            "description": "Short gap summary"
+        }
+    },
+    "required": [
+        "jd_id",
+        "resume_text",
+        "user_id"
+    ]
+}

@@ -1,0 +1,190 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 220 13% 4.5%;
+    --foreground: 216 3% 94%;
+
+    --card: 220 14% 9%;
+    --card-foreground: 216 3% 94%;
+
+    --popover: 220 15% 12%;
+    --popover-foreground: 216 3% 94%;
+
+    --primary: 156 76% 64%;
+    --primary-foreground: 161 71% 8%;
+
+    --secondary: 220 15% 12%;
+    --secondary-foreground: 216 3% 94%;
+
+    --muted: 220 15% 12%;
+    --muted-foreground: 217 6% 67%;
+
+    --accent: 220 15% 12%;
+    --accent-foreground: 216 3% 94%;
+
+    --destructive: 355 83% 69%;
+    --destructive-foreground: 161 71% 8%;
+
+    --border: 218 13% 17%;
+    --input: 218 13% 17%;
+    --ring: 156 76% 64%;
+
+    --radius: 0.375rem;
+
+    --surface: 220 14% 9%;
+    --surface-raised: 220 15% 12%;
+    --border-strong: 216 13% 23%;
+    --text-faint: 215 8% 47%;
+    --brand: 156 76% 64%;
+    --brand-ink: 161 71% 8%;
+    --agent: 236 100% 77%;
+    --warn: 36 89% 64%;
+    --info: 197 89% 65%;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  html {
+    color-scheme: dark;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-feature-settings: 'cv05' 1;
+  }
+
+  h1,
+  h2,
+  h3 {
+    @apply font-display tracking-tight;
+  }
+
+  ::selection {
+    background: hsl(var(--brand) / 0.28);
+  }
+
+  *:focus-visible {
+    outline: 2px solid hsl(var(--brand));
+    outline-offset: 2px;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: hsl(var(--background));
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: hsl(var(--border-strong));
+    border-radius: 999px;
+  }
+}
+
+@layer components {
+  .panel {
+    @apply rounded-[10px] border border-border bg-card;
+  }
+
+  .panel-pad {
+    @apply p-5;
+  }
+
+  .eyebrow {
+    @apply font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground;
+  }
+
+  .tag {
+    @apply inline-flex items-center gap-1 rounded-full border border-[hsl(var(--border-strong))] bg-[hsl(var(--surface-raised))] px-2.5 py-0.5 font-mono text-[11px] leading-5 text-foreground/90;
+  }
+
+  .tag-agent {
+    @apply border-[hsl(var(--agent)/0.45)] bg-[hsl(var(--agent)/0.12)] text-[hsl(var(--agent))];
+  }
+
+  .tag-new {
+    @apply border-[hsl(var(--brand)/0.5)] bg-[hsl(var(--brand)/0.12)] text-[hsl(var(--brand))];
+  }
+
+  .tag-hit {
+    @apply border-[hsl(var(--border-strong))] text-muted-foreground;
+  }
+
+  .field {
+    @apply w-full rounded-md border border-border bg-[hsl(var(--surface-raised))] px-3 py-2.5 text-sm text-foreground placeholder:text-[hsl(var(--text-faint))] focus:border-[hsl(var(--border-strong))] focus-visible:outline-none;
+  }
+
+  .btn {
+    @apply inline-flex h-9 items-center justify-center gap-2 rounded-md px-3.5 text-sm font-medium transition-colors duration-150 disabled:pointer-events-none disabled:opacity-40;
+  }
+
+  .btn-primary {
+    @apply bg-[hsl(var(--brand))] text-[hsl(var(--brand-ink))] hover:bg-[hsl(var(--brand)/0.88)];
+  }
+
+  .btn-secondary {
+    @apply border border-[hsl(var(--border-strong))] bg-[hsl(var(--surface-raised))] text-foreground hover:bg-[hsl(var(--surface-raised)/0.7)];
+  }
+
+  .btn-ghost {
+    @apply text-muted-foreground hover:bg-[hsl(var(--surface-raised))] hover:text-foreground;
+  }
+
+  .table-shell {
+    @apply w-full border-collapse text-left text-[13px];
+  }
+
+  .table-shell th {
+    @apply border-b border-border bg-[hsl(var(--surface-raised))] px-3 py-2.5 font-mono text-[11px] font-medium uppercase tracking-[0.1em] text-muted-foreground;
+  }
+
+  .table-shell td {
+    @apply border-b border-border px-3 py-3 align-top;
+  }
+
+  .table-shell tbody tr:hover {
+    background: hsl(var(--surface-raised) / 0.5);
+  }
+}
+
+@layer utilities {
+  .agent-pulse {
+    animation: agent-pulse 1.6s ease-in-out infinite;
+  }
+
+  @keyframes agent-pulse {
+    0%,
+    100% {
+      opacity: 0.35;
+      transform: scale(0.86);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  .rise-in {
+    animation: rise-in 220ms ease-out both;
+  }
+
+  @keyframes rise-in {
+    from {
+      opacity: 0;
+      transform: translateY(4px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}

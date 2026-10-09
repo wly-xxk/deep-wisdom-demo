@@ -1,0 +1,39 @@
+{
+    "title": "knowledge_marks",
+    "type": "object",
+    "description": "Per-user private marks on global knowledge points",
+    "properties": {
+        "id": {
+            "type": "integer",
+            "description": "Auto-increment primary key"
+        },
+        "user_id": {
+            "type": "string",
+            "description": "Owner user id (system managed)"
+        },
+        "tech_id": {
+            "type": "integer",
+            "description": "Related knowledge_points id"
+        },
+        "tech_name": {
+            "type": "string",
+            "description": "Technology name for display"
+        },
+        "mastery": {
+            "type": "string",
+            "description": "Mastery level: learning / familiar / mastered"
+        },
+        "favorited": {
+            "type": "boolean",
+            "description": "Whether the user favorited it"
+        },
+        "personal_notes": {
+            "type": "string",
+            "description": "Private personal notes"
+        }
+    },
+    "required": [
+        "tech_id",
+        "user_id"
+    ]
+}
