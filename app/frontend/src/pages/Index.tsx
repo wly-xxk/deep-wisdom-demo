@@ -156,7 +156,7 @@ export default function Index() {
           <div className="mb-6 flex items-center gap-3">
             <AgentAvatar agent="analyst" />
             <div>
-              <h1 className="font-display text-xl font-semibold text-foreground">InterviewPrep</h1>
+              <h1 className="font-display text-xl font-semibold text-foreground">面试助手</h1>
               <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-faint">
                 多智能体面试备战工作台
               </p>
@@ -186,12 +186,12 @@ export default function Index() {
       <header className="border-b border-border">
         <div className="mx-auto flex max-w-[1280px] flex-wrap items-center justify-between gap-3 px-4 py-3.5 sm:px-6">
           <div className="flex items-center gap-3">
-            <div className="flex h-8 w-8 items-center justify-center rounded-md border border-[hsl(var(--brand)/0.4)] bg-[hsl(var(--brand)/0.14)] font-mono text-[11px] font-medium text-[hsl(var(--brand))]">
-              IP
+            <div className="flex h-8 w-8 items-center justify-center rounded-md border border-[hsl(var(--brand)/0.4)] bg-[hsl(var(--brand)/0.14)] font-display text-[13px] font-semibold text-[hsl(var(--brand))]">
+              面
             </div>
             <div>
               <h1 className="font-display text-[17px] font-semibold leading-tight text-foreground">
-                InterviewPrep
+                面试助手
               </h1>
               <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-faint">
                 多智能体协作 · 面试备战
