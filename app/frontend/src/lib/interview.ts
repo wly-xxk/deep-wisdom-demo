@@ -6,6 +6,7 @@ import type {
   GapResult,
   InterviewSession,
   JdResult,
+  KnowledgeDoc,
   KnowledgePointView,
   Mark,
   SessionSummary,
@@ -155,6 +156,19 @@ export async function getKnowledgePoint(techId: number): Promise<{
     related: { id: number; name: string; category: string }[];
     mark: Mark | null;
   };
+}
+
+export async function generateKnowledgeDoc(
+  techId: number,
+  regenerate = false,
+): Promise<{ tech_id: number; doc: KnowledgeDoc; version: number }> {
+  const res = await client.apiCall.invoke({
+    url: `/api/v1/knowledge/point/${techId}/doc${regenerate ? '?regenerate=true' : ''}`,
+    method: 'POST',
+    data: {},
+    options: { timeout: AI_TIMEOUT },
+  });
+  return res.data as { tech_id: number; doc: KnowledgeDoc; version: number };
 }
 
 export async function upsertKnowledgeMark(data: {

@@ -8,6 +8,7 @@ import {
   Panel,
   PanelHeader,
 } from '@/components/interview/ui';
+import { KnowledgeDocView } from '@/components/interview/KnowledgeDocView';
 import { getErrorDetail, listKnowledgePoints, upsertKnowledgeMark } from '@/lib/interview';
 import type { KnowledgePointView } from '@/lib/types';
 
@@ -191,6 +192,20 @@ export function KnowledgePage({ onBack }: { onBack: () => void }) {
             />
             <div className="space-y-4">
               <div>
+                <p className="eyebrow mb-2">备战文档 · 是什么 / 解决什么问题 / 怎么用</p>
+                <KnowledgeDocView
+                  key={active.id}
+                  techId={active.id}
+                  techName={active.name}
+                  doc={active.doc}
+                  onDoc={(doc) => {
+                    const updated = { ...active, doc };
+                    setActive(updated);
+                    setItems((prev) => prev.map((item) => (item.id === updated.id ? updated : item)));
+                  }}
+                />
+              </div>
+              <div className="border-t border-border pt-4">
                 <p className="eyebrow">核心要点</p>
                 <ul className="mt-1.5 space-y-1.5 text-[13px] leading-6 text-foreground/90">
                   {active.key_points.length > 0 ? (

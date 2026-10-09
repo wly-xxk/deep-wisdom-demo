@@ -195,5 +195,92 @@ def knowledge_point_view(point: Knowledge_points) -> Dict[str, Any]:
         "key_points": list(point.key_points or []),
         "common_exam_points": list(point.common_exam_points or []),
         "related_technologies": list(point.related_technologies or []),
+        "doc": point.doc if isinstance(point.doc, dict) else None,
         "is_new": False,
     }
+
+
+DOC_MODEL = "claude-opus-5"
+
+
+def _normalize_doc(data: Dict[str, Any]) -> Dict[str, Any]:
+    """Validate the generated document against the what / why / how structure."""
+    problems = []
+    for item in data.get("problems") or []:
+        if isinstance(item, dict) and (item.get("problem") or "").strip():
+            problems.append(
+                {
+                    "problem": item["problem"].strip(),
+                    "solution": (item.get("solution") or "").strip(),
+                }
+            )
+    how = data.get("how_to_use") if isinstance(data.get("how_to_use"), dict) else {}
+    steps = []
+    for item in how.get("steps") or []:
+        if isinstance(item, dict) and (item.get("title") or "").strip():
+            steps.append({"title": item["title"].strip(), "detail": (item.get("detail") or "").strip()})
+        elif isinstance(item, str) and item.strip():
+            steps.append({"title": item.strip(), "detail": ""})
+    doc = {
+        "what_is": (data.get("what_is") or "").strip(),
+        "core_concepts": as_str_list(data.get("core_concepts")),
+        "problems": problems,
+        "how_to_use": {
+            "scenarios": as_str_list(how.get("scenarios")),
+            "steps": steps,
+            "example": (how.get("example") or "").strip(),
+            "best_practices": as_str_list(how.get("best_practices")),
+            "pitfalls": as_str_list(how.get("pitfalls")),
+        },
+        "interview_tips": as_str_list(data.get("interview_tips")),
+    }
+    if not doc["what_is"] or not problems or not steps:
+        raise ValueError("文档缺少必需部分（是什么 / 解决什么问题 / 怎么用）")
+    return doc
+
+
+async def generate_knowledge_doc(point: Dict[str, Any]) -> Dict[str, Any]:
+    """Generate a structured doc following: what it is -> what problems it solves -> how to use."""
+    prompt = (
+        f"请为技术「{point.get('name')}」（分类：{point.get('category')}）写一份面试备战文档。"
+        "严格按「是什么 → 解决什么问题 → 怎么用」的思路组织，只输出 JSON：\n"
+        "{\n"
+        '  "what_is": "是什么：2-4 句话讲清定义、定位与核心原理",\n'
+        '  "core_concepts": ["核心概念：一句话解释"],\n'
+        '  "problems": [{"problem": "它解决的具体问题/痛点", "solution": "它是如何解决的"}],\n'
+        '  "how_to_use": {\n'
+        '    "scenarios": ["典型使用场景"],\n'
+        '    "steps": [{"title": "步骤名", "detail": "具体做法"}],\n'
+        '    "example": "最小可运行示例（命令/配置/代码），用纯文本",\n'
+        '    "best_practices": ["最佳实践"],\n'
+        '    "pitfalls": ["常见坑"]\n'
+        "  },\n"
+        '  "interview_tips": ["面试时如何组织回答的要点"]\n'
+        "}\n"
+        "要求：problems 3-5 条，steps 3-6 步，core_concepts 3-6 条；全部中文，内容具体，不要空话。\n"
+        f"已知信息：定义={point.get('definition', '')}；要点={point.get('key_points', [])}；"
+        f"考点={point.get('common_exam_points', [])}"
+    )
+    service = AIHubService()
+    last_error: Exception = ValueError("文档生成失败")
+    for _ in range(2):
+        try:
+            response = await service.gentxt(
+                GenTxtRequest(
+                    messages=[
+                        ChatMessage(role="system", content="你是资深技术专家与面试官，只输出严格 JSON。"),
+                        ChatMessage(role="user", content=prompt),
+                    ],
+                    model=DOC_MODEL,
+                    stream=False,
+                    temperature=0.3,
+                    max_tokens=4096,
+                )
+            )
+            data = json.loads(extract_json_block(response.content))
+            if not isinstance(data, dict):
+                raise ValueError("文档结构不是 JSON 对象")
+            return _normalize_doc(data)
+        except Exception as exc:  # noqa: BLE001 - one retry, then surface the error
+            last_error = exc
+    raise last_error

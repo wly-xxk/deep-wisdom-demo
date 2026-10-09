@@ -2,7 +2,22 @@
 
 export type Priority = 'P0' | 'P1' | 'P2';
 
+export interface KnowledgeDoc {
+  what_is: string;
+  core_concepts: string[];
+  problems: { problem: string; solution: string }[];
+  how_to_use: {
+    scenarios: string[];
+    steps: { title: string; detail: string }[];
+    example: string;
+    best_practices: string[];
+    pitfalls: string[];
+  };
+  interview_tips: string[];
+}
+
 export interface KnowledgeTag {
+  doc?: KnowledgeDoc | null;
   id: number;
   name: string;
   category: string;

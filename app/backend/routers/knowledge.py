@@ -13,7 +13,11 @@ from dependencies.auth import get_current_user
 from models.knowledge_marks import Knowledge_marks
 from models.knowledge_points import Knowledge_points
 from schemas.auth import UserResponse
-from services.knowledge_tools import knowledge_point_view, list_knowledge_points
+from services.knowledge_tools import (
+    generate_knowledge_doc,
+    knowledge_point_view,
+    list_knowledge_points,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -104,6 +108,35 @@ async def get_point(
     mark = marks_result.scalars().first()
 
     return {"point": view, "related": related, "mark": _mark_view(mark) if mark else None}
+
+
+@router.post("/point/{tech_id}/doc")
+async def generate_point_doc(
+    tech_id: int,
+    regenerate: bool = Query(False, description="Force regeneration even if a doc exists"),
+    current_user: UserResponse = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    """Generate (or return cached) the what / why / how document for a knowledge point."""
+    point = await _load_point(db, tech_id)
+    view = knowledge_point_view(point)
+    await db.commit()
+
+    if view.get("doc") and not regenerate:
+        return {"tech_id": tech_id, "doc": view["doc"], "version": point.version or 1}
+
+    try:
+        doc = await generate_knowledge_doc(view)
+    except Exception as exc:  # noqa: BLE001
+        logger.error("Knowledge doc generation failed: %s", exc, exc_info=True)
+        raise HTTPException(status_code=500, detail="文档生成失败，请稍后重试")
+
+    point = await _load_point(db, tech_id)
+    point.doc = doc
+    point.version = (point.version or 1) + (1 if view.get("doc") else 0)
+    version = point.version
+    await db.commit()
+    return {"tech_id": tech_id, "doc": doc, "version": version}
 
 
 @router.post("/mark")

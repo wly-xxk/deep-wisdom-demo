@@ -28,6 +28,7 @@ class Knowledge_pointsData(BaseModel):
     related_technologies: Optional[List[str]] = None
     version: int = None
     feedback_count: int = None
+    doc: Optional[dict] = None
 
 
 class Knowledge_pointsUpdateData(BaseModel):
@@ -40,6 +41,7 @@ class Knowledge_pointsUpdateData(BaseModel):
     related_technologies: Optional[List[str]] = None
     version: Optional[int] = None
     feedback_count: Optional[int] = None
+    doc: Optional[dict] = None
 
 
 class Knowledge_pointsResponse(BaseModel):
@@ -53,6 +55,7 @@ class Knowledge_pointsResponse(BaseModel):
     related_technologies: Optional[List[str]] = None
     version: Optional[int] = None
     feedback_count: Optional[int] = None
+    doc: Optional[dict] = None
     created_at: Optional[datetime] = None
     updated_at: Optional[datetime] = None
 

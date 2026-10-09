@@ -21,14 +21,23 @@
         },
         "key_points": {
             "type": "array",
+            "items": {
+                "type": "string"
+            },
             "description": "Key points list"
         },
         "common_exam_points": {
             "type": "array",
+            "items": {
+                "type": "string"
+            },
             "description": "Common interview exam points"
         },
         "related_technologies": {
             "type": "array",
+            "items": {
+                "type": "string"
+            },
             "description": "Related technology names"
         },
         "version": {
@@ -38,6 +47,10 @@
         "feedback_count": {
             "type": "integer",
             "description": "Times this knowledge point was referenced"
+        },
+        "doc": {
+            "type": "object",
+            "description": "Structured document: what it is / problems solved / how to use"
         }
     },
     "required": [
