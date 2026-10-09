@@ -36,4 +36,5 @@ InterviewPrep — 面试备战多智能体协作系统（Demo 落地版）。单
 - 2026-10-09 创建 5 张表；abilities/gaps/dialogue 调整为 JSONB，迁移 4e37a7065af4 完成 ARRAY→JSONB 转换。
 - 2026-10-09 后端完成：knowledge_tools + interview_agents 服务层、interview/knowledge 自定义路由，4 个文件 pycheck 通过。
 - 2026-10-09 前端完成：DESIGN.md 深色控制台规范、四阶段页面、知识点库页、历史记录；lint 与 build 通过。
+- 2026-10-09 导航改造：新增 WorkspaceContext（localStorage 持久化）、AppLayout 常驻侧边栏、真实路由 / /knowledge /history，删除旧 Index.tsx；lint 与 build 通过。
 - 2026-10-09 已知非阻塞项：sitemap 插件在 dist 不存在时写 robots.txt 失败，先 mkdir dist 再 build 即可通过（模板既有行为）。

@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { BookOpen, Loader2, Search, Star } from 'lucide-react';
 import { toast } from 'sonner';
 import {
@@ -18,7 +19,8 @@ const MASTERY = [
   { value: 'mastered', label: '已掌握' },
 ];
 
-export function KnowledgePage({ onBack }: { onBack: () => void }) {
+export default function KnowledgePage() {
+  const navigate = useNavigate();
   const [items, setItems] = useState<KnowledgePointView[]>([]);
   const [keyword, setKeyword] = useState('');
   const [loading, setLoading] = useState(true);
@@ -81,7 +83,7 @@ export function KnowledgePage({ onBack }: { onBack: () => void }) {
             title="技术知识点库"
             description="JD 分析师与模拟面试官在运行时会查询这里；未命中的技术会被自动生成并写回。个人标记仅自己可见。"
             action={
-              <button type="button" className="btn btn-ghost h-8" onClick={onBack}>
+              <button type="button" className="btn btn-ghost h-8" onClick={() => navigate('/')}>
                 返回工作台
               </button>
             }
@@ -121,7 +123,7 @@ export function KnowledgePage({ onBack }: { onBack: () => void }) {
                   : '完成一次 JD 分析后，识别到的通用技术会被自动写入这里。'
               }
               action={
-                <button type="button" className="btn btn-primary" onClick={onBack}>
+                <button type="button" className="btn btn-primary" onClick={() => navigate('/')}>
                   去做 JD 分析
                 </button>
               }
