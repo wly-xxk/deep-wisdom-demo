@@ -185,3 +185,23 @@ export async function upsertKnowledgeMark(data: {
   });
   return res.data as { mark: Mark };
 }
+
+export function fileToDataUri(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(String(reader.result));
+    reader.onerror = () => reject(new Error('读取文件失败'));
+    reader.readAsDataURL(file);
+  });
+}
+
+export async function extractTextFromFile(file: File, kind: 'jd' | 'resume'): Promise<string> {
+  const dataUri = await fileToDataUri(file);
+  const res = await client.apiCall.invoke({
+    url: '/api/v1/interview/extract_text',
+    method: 'POST',
+    data: { file: dataUri, kind },
+    options: { timeout: 600_000 },
+  });
+  return (res.data as { text: string }).text;
+}

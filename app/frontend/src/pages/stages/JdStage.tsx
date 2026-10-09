@@ -10,6 +10,7 @@ import {
   PanelHeader,
   PriorityPill,
 } from '@/components/interview/ui';
+import { FileUploadButton } from '@/components/interview/FileUploadButton';
 import { analyzeJd, getErrorDetail, updateJdAbilities } from '@/lib/interview';
 import type { Ability, JdResult, Priority } from '@/lib/types';
 
@@ -99,10 +100,13 @@ export function JdStage({
             title="粘贴目标岗位 JD"
             description="分析师会拆解能力矩阵，并在分析过程中主动调用知识点库工具。"
             action={
-              <button type="button" className="btn btn-ghost h-8" onClick={() => onJdTextChange(SAMPLE_JD)}>
-                <FileText className="h-3.5 w-3.5" />
-                填入示例 JD
-              </button>
+              <div className="flex flex-wrap gap-2">
+                <FileUploadButton kind="jd" onText={onJdTextChange} />
+                <button type="button" className="btn btn-ghost h-8" onClick={() => onJdTextChange(SAMPLE_JD)}>
+                  <FileText className="h-3.5 w-3.5" />
+                  填入示例 JD
+                </button>
+              </div>
             }
           />
           <div className="grid gap-3 sm:grid-cols-2">
@@ -137,7 +141,7 @@ export function JdStage({
           {error && <div className="mt-3">{<ErrorNote message={error} onRetry={handleAnalyze} />}</div>}
           <div className="mt-4 flex items-center justify-between gap-3">
             <p className="text-[12px] text-muted-foreground">
-              当前阶段只支持纯文本粘贴（PDF / 图片解析为二期能力）。
+              支持直接粘贴文本，或上传 PDF / 截图自动识别（识别后可编辑）。
             </p>
             <button type="button" className="btn btn-primary" onClick={handleAnalyze} disabled={loading}>
               {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4" />}
@@ -274,8 +278,9 @@ export function JdStage({
         <Panel>
           <PanelHeader
             eyebrow="Step 02 准备 · 简历"
-            title="粘贴你的简历文本"
-            description="用于生成差距分析：逐条比对能力项与简历证据。"
+            title="粘贴或上传你的简历"
+            description="用于生成差距分析：逐条比对能力项与简历证据。支持 PDF / 图片自动识别。"
+            action={<FileUploadButton kind="resume" onText={onResumeTextChange} />}
           />
           <textarea
             className="field min-h-[180px] resize-y text-[13px] leading-6"
